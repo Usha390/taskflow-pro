@@ -12,7 +12,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::forUser(auth()->id())
-           // ->withCount('tasks')
+            ->withCount('tasks')
             ->latest()
             ->paginate(9);
 
@@ -51,7 +51,7 @@ class ProjectController extends Controller
     // একটা নির্দিষ্ট project দেখাও
     public function show(Project $project)
     {
-        $project->load(['members', 'creator']);
+        $project->load(['tasks.assignee','members', 'creator']);
 
         return view('projects.show', compact('project'));
     }

@@ -43,4 +43,28 @@ class User extends Authenticatable
     {
         return $this->role === 'developer';
     }
+    // User এর সব projects (Many-to-Many)
+public function projects()
+{
+    return $this->belongsToMany(Project::class)
+                ->withPivot('role')
+                ->withTimestamps();
+}
+
+// User যে projects তৈরি করেছে
+public function ownedProjects()
+{
+    return $this->hasMany(Project::class, 'created_by');
+}
+
+// User এর assigned tasks
+public function assignedTasks()
+{
+    return $this->hasMany(Task::class, 'assigned_to');
+}
+// User এর comments (অনেক comment)
+public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
 }

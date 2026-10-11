@@ -49,25 +49,59 @@
             </div>
         </div>
 
-        {{-- Tasks --}}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-bold">Tasks ({{ $project->tasks->count() }})</h2>
-            </div>
-            
-            @if($project->tasks->count() > 0)
-                <div class="space-y-2">
-                    @foreach($project->tasks as $task)
-                        <div class="border-l-4 border-indigo-500 pl-4 py-2">
-                            <p class="font-semibold">{{ $task->title }}</p>
-                            <p class="text-sm text-gray-500">{{ $task->status }}</p>
+      {{-- Tasks --}}
+<div class="bg-white rounded-lg shadow p-6">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Tasks ({{ $project->tasks->count() }})</h2>
+        <a href="{{ route('tasks.create', ['project_id' => $project->id]) }}" 
+           class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-sm">
+            + Add Task
+        </a>
+    </div>
+    
+    @if($project->tasks->count() > 0)
+        <div class="space-y-2">
+            @foreach($project->tasks as $task)
+                <div class="border-l-4 pl-4 py-2
+                    @if($task->status == 'done') border-green-500
+                    @elseif($task->status == 'in_progress') border-yellow-500
+                    @elseif($task->status == 'review') border-purple-500
+                    @else border-gray-300 @endif">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <a href="{{ route('tasks.show', $task) }}" 
+                                   class="font-semibold hover:text-indigo-600">
+                                    {{ $task->title }}
+                                </a>
+                                
+                                <span class="text-xs px-2 py-1 rounded-full
+                                    @if($task->priority == 'urgent') bg-red-100 text-red-800
+                                    @elseif($task->priority == 'high') bg-orange-100 text-orange-800
+                                    @elseif($task->priority == 'medium') bg-yellow-100 text-yellow-800
+                                    @else bg-green-100 text-green-800 @endif">
+                                    {{ $task->priority }}
+                                </span>
+                            </div>
+                            
+                            @if($task->assignee)
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Assigned to: {{ $task->assignee->name }}
+                                </p>
+                            @endif
                         </div>
-                    @endforeach
+                        
+                        <span class="text-xs text-gray-500">
+                            {{ str_replace('_', ' ', $task->status) }}
+                        </span>
+                    </div>
                 </div>
-            @else
-                <p class="text-gray-500">No tasks yet.</p>
-            @endif
+            @endforeach
         </div>
+    @else
+        <p class="text-gray-500">No tasks yet. Create your first task!</p>
+    @endif
+</div>
 
         {{-- Back --}}
         <div class="mt-6">
