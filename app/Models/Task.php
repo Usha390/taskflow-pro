@@ -44,10 +44,10 @@ class Task extends Model
      }
 
     // Task এর attachments (পরে তৈরি করবো)
-    // public function attachments()
-    // {
-    //     return $this->hasMany(Attachment::class);
-    // }
+     public function attachments()
+     {
+         return $this->hasMany(Attachment::class);
+     }
 
     // Overdue tasks check করার scope
     public function scopeOverdue($query)

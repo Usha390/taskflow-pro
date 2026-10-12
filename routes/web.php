@@ -3,6 +3,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AttachmentController; 
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +31,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('comments.store');
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])
         ->name('comments.destroy');
+        // Attachment Routes
+Route::post('tasks/{task}/attachments', [AttachmentController::class, 'store'])
+    ->name('attachments.store');
+Route::delete('attachments/{attachment}', [AttachmentController::class, 'destroy'])
+    ->name('attachments.destroy');
 });
 require __DIR__.'/auth.php';
