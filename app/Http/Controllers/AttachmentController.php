@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attachment;
 use App\Models\Task;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,6 +23,7 @@ class AttachmentController extends Controller
 
         $file = $request->file('file');
 
+
         // File storage এ save করো
         $path = $file->store('attachments/' . $task->id, 'public');
 
@@ -32,6 +34,7 @@ class AttachmentController extends Controller
             'original_name' => $file->getClientOriginalName(),
             'file_size' => $file->getSize(),
         ]);
+      
 
         return back()->with('success', 'File uploaded successfully!');
     }

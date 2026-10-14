@@ -91,7 +91,25 @@
                         </select>
                     </div>
                 </div>
-
+{{-- Assigned To --}}
+<div class="mb-4">
+    <label class="block text-gray-700 font-medium mb-2">
+        Assigned To
+    </label>
+    <select name="assigned_to" 
+            class="w-full border-gray-300 rounded-md">
+        <option value="">-- Unassigned --</option>
+        @foreach(\App\Models\User::all() as $user)
+            <option value="{{ $user->id }}" 
+                {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
+                {{ $user->name }} ({{ $user->email }})
+            </option>
+        @endforeach
+    </select>
+    @error('assigned_to')
+        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+    @enderror
+</div>
                 {{-- Due Date --}}
                 <div class="mb-6">
                     <label class="block text-gray-700 font-medium mb-2">

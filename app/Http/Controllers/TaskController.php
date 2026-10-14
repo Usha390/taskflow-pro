@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -47,9 +48,17 @@ class TaskController extends Controller
             'status' => 'required|in:todo,in_progress,review,done',
             'priority' => 'required|in:low,medium,high,urgent',
             'due_date' => 'nullable|date',
+            
+
         ]);
 
         $task = Task::create($validated);
+   
+        
+        // Notification trigger
+        if ($task->assignee && $task->assignee->id !== auth()->id()) {
+            $task->assignee->notify(new \App\Notifications\TaskAssignedNotification($task));
+        }
 
         return redirect()->route('projects.show', $task->project_id)
             ->with('success', 'Task created successfully!');
@@ -86,6 +95,12 @@ class TaskController extends Controller
         ]);
 
         $task->update($validated);
+       
+        
+    // Notification trigger
+    if ($task->assignee && $task->assignee->id !== auth()->id()) {
+        $task->assignee->notify(new \App\Notifications\TaskAssignedNotification($task));
+    }
 
         return redirect()->route('projects.show', $task->project_id)
             ->with('success', 'Task updated successfully!');
@@ -96,6 +111,7 @@ class TaskController extends Controller
     {
         $projectId = $task->project_id;
         $task->delete();
+   
 
         return redirect()->route('projects.show', $projectId)
             ->with('success', 'Task deleted successfully!');
