@@ -5,6 +5,9 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AttachmentController; 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KanbanController;
+use App\Http\Controllers\NotificationController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,5 +39,18 @@ Route::post('tasks/{task}/attachments', [AttachmentController::class, 'store'])
     ->name('attachments.store');
 Route::delete('attachments/{attachment}', [AttachmentController::class, 'destroy'])
     ->name('attachments.destroy');
+    // Kanban Routes
+Route::get('/board', [KanbanController::class, 'index'])
+    ->name('kanban.index');
+Route::patch('/tasks/{task}/status', [KanbanController::class, 'updateStatus'])
+    ->name('kanban.updateStatus');
+    // Notification Routes
+Route::get('/notifications', [NotificationController::class, 'index'])
+    ->name('notifications.index');
+Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])
+    ->name('notifications.read');
+Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
+    ->name('notifications.readAll');
+    
 });
 require __DIR__.'/auth.php';

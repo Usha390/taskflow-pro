@@ -36,6 +36,7 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
+    
 
     // শুধু যেসব project এ user member
     public function scopeForUser($query, $userId)
