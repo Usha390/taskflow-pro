@@ -48,7 +48,11 @@ class Task extends Model
      {
          return $this->hasMany(Attachment::class);
      }
-    
+    // Task এর activities (activity log)
+public function activities()
+{
+    return $this->hasMany(Activity::class);
+}
 
     // Overdue tasks check করার scope
     public function scopeOverdue($query)

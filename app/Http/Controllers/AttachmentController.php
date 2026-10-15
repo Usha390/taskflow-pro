@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attachment;
 use App\Models\Task;
+use App\Models\Activity;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -34,6 +35,14 @@ class AttachmentController extends Controller
             'original_name' => $file->getClientOriginalName(),
             'file_size' => $file->getSize(),
         ]);
+        // Activity log
+Activity::create([
+    'user_id' => auth()->id(),
+    'task_id' => $task->id,
+    'project_id' => $task->project_id,
+    'action' => 'uploaded',
+    'description' => 'Uploaded file to "' . $task->title . '"',
+]);
       
 
         return back()->with('success', 'File uploaded successfully!');

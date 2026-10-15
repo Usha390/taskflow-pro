@@ -38,6 +38,10 @@
     <x-nav-link :href="route('kanban.index')" :active="request()->routeIs('kanban.*')">
         {{ __('Board') }}
     </x-nav-link>
+    {{-- Activity --}}
+    <x-nav-link :href="route('activity.index')" :active="request()->routeIs('activity.*')">
+    {{ __('Activity') }}
+</x-nav-link>
     
 </div>
 </div>

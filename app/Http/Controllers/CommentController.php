@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Task;
+use App\Models\Activity;
 
 use Illuminate\Http\Request;
 
@@ -20,6 +21,14 @@ class CommentController extends Controller
             'user_id' => auth()->id(),
             'body' => $validated['body'],
         ]);
+        // Activity log
+Activity::create([
+    'user_id' => auth()->id(),
+    'task_id' => $task->id,
+    'project_id' => $task->project_id,
+    'action' => 'commented',
+    'description' => 'Commented on "' . $task->title . '"',
+]);
 
         return back()->with('success', 'Comment added successfully!');
     }

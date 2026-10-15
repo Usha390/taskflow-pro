@@ -36,7 +36,11 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
-    
+    // Project এর activities (activity log)
+public function activities()
+{
+    return $this->hasMany(Activity::class);
+}
 
     // শুধু যেসব project এ user member
     public function scopeForUser($query, $userId)

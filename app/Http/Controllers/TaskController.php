@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Activity;
 
 use Illuminate\Http\Request;
 
@@ -53,6 +54,14 @@ class TaskController extends Controller
         ]);
 
         $task = Task::create($validated);
+        // Activity log
+Activity::create([
+    'user_id' => auth()->id(),
+    'task_id' => $task->id,
+    'project_id' => $task->project_id,
+    'action' => 'created',
+    'description' => 'Created task "' . $task->title . '"',
+]);
    
         
         // Notification trigger
@@ -95,6 +104,14 @@ class TaskController extends Controller
         ]);
 
         $task->update($validated);
+        // Activity log
+Activity::create([
+    'user_id' => auth()->id(),
+    'task_id' => $task->id,
+    'project_id' => $task->project_id,
+    'action' => 'updated',
+    'description' => 'Updated task "' . $task->title . '"',
+]);
        
         
     // Notification trigger

@@ -7,6 +7,7 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KanbanController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ActivityController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +52,9 @@ Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsR
     ->name('notifications.read');
 Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
     ->name('notifications.readAll');
+    // Activity Log Routes
+Route::get('/activity', [ActivityController::class, 'index'])
+    ->name('activity.index');
     
 });
 require __DIR__.'/auth.php';
