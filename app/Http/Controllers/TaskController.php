@@ -5,29 +5,55 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-use App\Models\Activity;
-
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
     // সব task দেখাও (filter সহ)
     public function index(Request $request)
-    {
-        $projectIds = auth()->user()->projects()->pluck('projects.id');
+{
+    $user = auth()->user();
+    $projectIds = $user->projects()->pluck('projects.id');
 
-        $tasks = Task::whereIn('project_id', $projectIds)
-            ->with(['project', 'assignee'])
-            ->byStatus($request->status)
-            ->byPriority($request->priority)
-            ->when($request->search, function ($q, $search) {
-                return $q->where('title', 'like', "%{$search}%");
-            })
-            ->latest()
-            ->paginate(15);
+    $tasks = Task::whereIn('project_id', $projectIds)
+        ->with(['project', 'assignee'])
 
-        return view('tasks.index', compact('tasks'));
-    }
+        // Search by title
+        ->when($request->search, fn($q, $s) =>
+            $q->where('title', 'like', "%{$s}%"))
+
+        // Filter by status
+        ->when($request->status, fn($q, $s) =>
+            $q->where('status', $s))
+
+        // Filter by priority
+        ->when($request->priority, fn($q, $p) =>
+            $q->where('priority', $p))
+
+        // Filter by project
+        ->when($request->project_id, fn($q, $pid) =>
+            $q->where('project_id', $pid))
+
+        // Filter by assignee
+        ->when($request->assigned_to, fn($q, $uid) =>
+            $q->where('assigned_to', $uid))
+
+        // Filter by due date range
+        ->when($request->due_from, fn($q, $d) =>
+            $q->whereDate('due_date', '>=', $d))
+        ->when($request->due_to, fn($q, $d) =>
+            $q->whereDate('due_date', '<=', $d))
+
+        ->latest()
+        ->paginate(15)
+        ->withQueryString();   // ← Important: Pagination এ filter preserve
+
+    // Filter dropdown এর জন্য data
+    $projects = $user->projects;
+    $users = \App\Models\User::all();
+
+    return view('tasks.index', compact('tasks', 'projects', 'users'));
+}
 
     // নতুন task form
     public function create(Request $request)
@@ -54,20 +80,6 @@ class TaskController extends Controller
         ]);
 
         $task = Task::create($validated);
-        // Activity log
-Activity::create([
-    'user_id' => auth()->id(),
-    'task_id' => $task->id,
-    'project_id' => $task->project_id,
-    'action' => 'created',
-    'description' => 'Created task "' . $task->title . '"',
-]);
-   
-        
-        // Notification trigger
-        if ($task->assignee && $task->assignee->id !== auth()->id()) {
-            $task->assignee->notify(new \App\Notifications\TaskAssignedNotification($task));
-        }
 
         return redirect()->route('projects.show', $task->project_id)
             ->with('success', 'Task created successfully!');
@@ -104,20 +116,6 @@ Activity::create([
         ]);
 
         $task->update($validated);
-        // Activity log
-Activity::create([
-    'user_id' => auth()->id(),
-    'task_id' => $task->id,
-    'project_id' => $task->project_id,
-    'action' => 'updated',
-    'description' => 'Updated task "' . $task->title . '"',
-]);
-       
-        
-    // Notification trigger
-    if ($task->assignee && $task->assignee->id !== auth()->id()) {
-        $task->assignee->notify(new \App\Notifications\TaskAssignedNotification($task));
-    }
 
         return redirect()->route('projects.show', $task->project_id)
             ->with('success', 'Task updated successfully!');

@@ -22,38 +22,121 @@
             </div>
         @endif
 
-        {{-- Filters --}}
-        <div class="bg-white rounded-lg shadow p-4 mb-6">
-            <form method="GET" class="grid grid-cols-4 gap-4">
+       {{-- Filters --}}
+<div class="bg-white rounded-lg shadow p-5 mb-6">
+    <form method="GET" action="{{ route('tasks.index') }}">
+        
+        {{-- Filter Row 1: Search + Status + Priority --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            {{-- Search --}}
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Search Title</label>
                 <input type="text" 
                        name="search" 
                        value="{{ request('search') }}"
                        placeholder="Search tasks..."
-                       class="border-gray-300 rounded-md">
-                
-                <select name="status" class="border-gray-300 rounded-md">
+                       class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+
+            {{-- Status --}}
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Status</label>
+                <select name="status" class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
                     <option value="">All Status</option>
                     <option value="todo" {{ request('status') == 'todo' ? 'selected' : '' }}>To Do</option>
                     <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
                     <option value="review" {{ request('status') == 'review' ? 'selected' : '' }}>Review</option>
                     <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
                 </select>
+            </div>
 
-                <select name="priority" class="border-gray-300 rounded-md">
+            {{-- Priority --}}
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Priority</label>
+                <select name="priority" class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
                     <option value="">All Priority</option>
                     <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Low</option>
                     <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
                     <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>High</option>
                     <option value="urgent" {{ request('priority') == 'urgent' ? 'selected' : '' }}>Urgent</option>
                 </select>
-
-                <button type="submit" 
-                        class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded-md">
-                    Filter
-                </button>
-            </form>
+            </div>
         </div>
 
+        {{-- Filter Row 2: Project + Assignee --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {{-- Project --}}
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Project</label>
+                <select name="project_id" class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <option value="">All Projects</option>
+                    @foreach($projects as $project)
+                        <option value="{{ $project->id }}" {{ request('project_id') == $project->id ? 'selected' : '' }}>
+                            {{ $project->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Assignee --}}
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Assigned To</label>
+                <select name="assigned_to" class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <option value="">All Users</option>
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}" {{ request('assigned_to') == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        {{-- Filter Row 3: Due Date Range --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Due Date From</label>
+                <input type="date" 
+                       name="due_from" 
+                       value="{{ request('due_from') }}"
+                       class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+
+            <div>
+                <label class="block text-xs font-medium text-gray-600 mb-1">Due Date To</label>
+                <input type="date" 
+                       name="due_to" 
+                       value="{{ request('due_to') }}"
+                       class="w-full border-gray-300 rounded-md text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            </div>
+        </div>
+
+        {{-- Buttons --}}
+        <div class="flex justify-between items-center pt-3 border-t border-gray-100">
+            <div class="text-xs text-gray-500">
+                @if(request()->hasAny(['search', 'status', 'priority', 'project_id', 'assigned_to', 'due_from', 'due_to']))
+                    <span class="font-medium">Filters active</span>
+                @else
+                    <span>No filters applied</span>
+                @endif
+            </div>
+            
+            <div class="flex gap-2">
+                @if(request()->hasAny(['search', 'status', 'priority', 'project_id', 'assigned_to', 'due_from', 'due_to']))
+                    <a href="{{ route('tasks.index') }}" 
+                       class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md text-sm transition-colors">
+                        Clear All
+                    </a>
+                @endif
+                
+                <button type="submit" 
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-md text-sm font-medium transition-colors">
+                    Apply Filters
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
         {{-- Tasks List --}}
         @if($tasks->count() > 0)
             <div class="bg-white rounded-lg shadow overflow-hidden">
