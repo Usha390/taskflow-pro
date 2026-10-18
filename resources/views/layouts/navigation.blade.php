@@ -1,113 +1,130 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 transition-colors duration-300">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 {{-- Logo --}}
-<div class="shrink-0 flex items-center">
-    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 group">
-        {{-- SVG Icon --}}
-        <div class="relative">
-            <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition"></div>
-            <div class="relative bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-1.5">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" 
-                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-                </svg>
-            </div>
-        </div>
-        
-        {{-- Brand Text --}}
-        <div class="flex flex-col leading-none">
-            <span class="font-extrabold text-lg bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                TaskFlow
-            </span>
-            <span class="text-[10px] font-semibold text-gray-500 tracking-wider">
-                PRO
-            </span>
-        </div>
-    </a>
-</div>
+                <div class="shrink-0 flex items-center">
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 group">
+                        {{-- SVG Icon --}}
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition"></div>
+                            <div class="relative bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-1.5">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" 
+                                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        {{-- Brand Text --}}
+                        <div class="flex flex-col leading-none">
+                            <span class="font-extrabold text-lg bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                TaskFlow
+                            </span>
+                            <span class="text-[10px] font-semibold text-gray-500 dark:text-gray-400 tracking-wider">
+                                PRO
+                            </span>
+                        </div>
+                    </a>
+                </div>
 
                 <!-- Navigation Links -->
-<div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-        {{ __('Dashboard') }}
-    </x-nav-link>
- {{-- Board (Kanban) --}}
-    <x-nav-link :href="route('kanban.index')" :active="request()->routeIs('kanban.*')">
-        {{ __('Board') }}
-    </x-nav-link>
-    {{-- Activity --}}
-    <x-nav-link :href="route('activity.index')" :active="request()->routeIs('activity.*')">
-    {{ __('Activity') }}
-</x-nav-link>
-<x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
-    {{ __('Reports') }}
-</x-nav-link>
-    
-</div>
-</div>
-            
-            <!-- Notification Bell -->
-<div class="hidden sm:flex sm:items-center sm:ms-4">
-    <x-dropdown align="right" width="80">
-        <x-slot name="trigger">
-            <button class="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 transition-colors">
-                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                </svg>
-                
-               @if(auth()->user()->unreadNotifications->count() > 0)
-    <span id="notification-badge" 
-          class="absolute top-1 right-1 flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-red-500 rounded-full">
-        {{ auth()->user()->unreadNotifications->count() }}
-    </span>
-@endif
-            </button>
-        </x-slot>
-
-        <x-slot name="content">
-            <div class="px-4 py-2 border-b border-gray-100">
-                <p class="text-xs font-semibold text-gray-700">Notifications</p>
-            </div>
-
-            @if(auth()->user()->unreadNotifications->count() > 0)
-                @foreach(auth()->user()->unreadNotifications->take(5) as $notification)
-    <form method="POST" 
-          action="{{ route('notifications.read', $notification->id) }}"
-          class="ajax-notification-form">
-        @csrf
-        <button type="submit" 
-                class="ajax-notification-btn block w-full text-left px-4 py-2 hover:bg-gray-50 text-sm"
-                data-notification-id="{{ $notification->id }}">
-            <p class="text-gray-800">{{ $notification->data['message'] ?? 'New notification' }}</p>
-            <p class="text-xs text-gray-500 mt-0.5">{{ $notification->created_at->diffForHumans() }}</p>
-        </button>
-    </form>
-@endforeach
-            @else
-                <div class="px-4 py-3 text-center text-sm text-gray-500">
-                    No new notifications
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('kanban.index')" :active="request()->routeIs('kanban.*')">
+                        {{ __('Board') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('activity.index')" :active="request()->routeIs('activity.*')">
+                        {{ __('Activity') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
+                        {{ __('Reports') }}
+                    </x-nav-link>
                 </div>
-            @endif
-
-            <div class="border-t border-gray-100">
-                <a href="{{ route('notifications.index') }}" 
-                   class="block px-4 py-2 text-xs text-center text-indigo-600 hover:bg-gray-50 font-medium">
-                    View all notifications
-                </a>
             </div>
-        </x-slot>
-    </x-dropdown>
-</div>
+
+            <!-- Theme Toggle -->
+            <div class="hidden sm:flex sm:items-center sm:ms-4">
+                <form method="POST" action="{{ route('theme.toggle') }}" id="themeForm">
+                    @csrf
+                    <button type="button" onclick="toggleTheme()" 
+                            class="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        @if(auth()->user()->theme === 'dark')
+                            <!-- Sun icon -->
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                            </svg>
+                        @else
+                            <!-- Moon icon -->
+                            <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                            </svg>
+                        @endif
+                    </button>
+                </form>
+            </div>
+
+            <!-- Notification Bell -->
+            <div class="hidden sm:flex sm:items-center sm:ms-4">
+                <x-dropdown align="right" width="80">
+                    <x-slot name="trigger">
+                        <button class="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                            <svg class="w-5 h-5 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                            </svg>
+                            
+                            @if(auth()->user()->unreadNotifications->count() > 0)
+                                <span id="notification-badge" class="absolute top-1 right-1 flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-red-500 rounded-full">
+                                    {{ auth()->user()->unreadNotifications->count() }}
+                                </span>
+                            @endif
+                        </button>
+                    </x-slot>
+
+                    <x-slot name="content">
+                        <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300">Notifications</p>
+                        </div>
+
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                            @foreach(auth()->user()->unreadNotifications->take(5) as $notification)
+                                <form method="POST" 
+                                      action="{{ route('notifications.read', $notification->id) }}"
+                                      class="ajax-notification-form">
+                                    @csrf
+                                    <button type="submit" 
+                                            class="ajax-notification-btn block w-full text-left px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm"
+                                            data-notification-id="{{ $notification->id }}">
+                                        <p class="text-gray-800 dark:text-gray-200">{{ $notification->data['message'] ?? 'New notification' }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $notification->created_at->diffForHumans() }}</p>
+                                    </button>
+                                </form>
+                            @endforeach
+                        @else
+                            <div class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400">
+                                No new notifications
+                            </div>
+                        @endif
+
+                        <div class="border-t border-gray-100 dark:border-gray-700">
+                            <a href="{{ route('notifications.index') }}" 
+                               class="block px-4 py-2 text-xs text-center text-indigo-600 dark:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium">
+                                View all notifications
+                            </a>
+                        </div>
+                    </x-slot>
+                </x-dropdown>
+            </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">
@@ -126,7 +143,6 @@
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
@@ -158,10 +174,10 @@
         </div>
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
+        <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-700">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+                <div class="font-medium text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
@@ -172,7 +188,6 @@
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">

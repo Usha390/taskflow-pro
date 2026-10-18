@@ -7,7 +7,9 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KanbanController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\ActivityController;
+
 use App\Http\Controllers\ReportsController;
 
 use Illuminate\Support\Facades\Route;
@@ -56,6 +58,9 @@ Route::post('/notifications/read-all', [NotificationController::class, 'markAllA
     // Reports Routes
 Route::get('/reports', [ReportsController::class, 'index'])
     ->name('reports.index');
+    // Theme Toggle Route
+Route::post('/theme/toggle', [ThemeController::class, 'toggle'])
+    ->name('theme.toggle');
     // Activity Log Routes
 Route::get('/activity', [ActivityController::class, 'index'])
     ->name('activity.index');
