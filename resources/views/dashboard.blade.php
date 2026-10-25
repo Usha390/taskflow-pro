@@ -211,7 +211,7 @@
                         </a>
                     @endforeach
                 </div>
-            @else
+                      @else
                 <div class="px-6 py-16 text-center">
                     <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 mb-4">
                         <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -221,10 +221,15 @@
                     </div>
                     <h3 class="text-sm font-semibold text-gray-900 mb-1">No recent activity</h3>
                     <p class="text-xs text-gray-500 mb-4">Start by creating a task in one of your projects</p>
-                    <a href="{{ route('projects.index') }}" 
-                       class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-900 hover:bg-gray-800 text-white text-xs font-medium rounded-lg transition-colors">
-                        Browse Projects
-                    </a>
+                    
+                    {{-- Ekhane condition ta boshalam --}}
+                    @if(in_array(auth()->user()->role, ['admin', 'manager']))
+                        <a href="{{ route('projects.index') }}" 
+                           class="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-900 hover:bg-gray-800 text-white text-xs font-medium rounded-lg transition-colors">
+                            Browse Projects
+                        </a>
+                    @endif
+
                 </div>
             @endif
         </div>

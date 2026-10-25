@@ -100,10 +100,12 @@
             class="w-full border-gray-300 rounded-md">
         <option value="">-- Unassigned --</option>
         @foreach(\App\Models\User::all() as $user)
-            <option value="{{ $user->id }}" 
-                {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
-                {{ $user->name }} ({{ $user->email }})
-            </option>
+            @if($user->role === 'developer')
+                <option value="{{ $user->id }}" 
+                    {{ old('assigned_to') == $user->id ? 'selected' : '' }}>
+                    {{ $user->name }} ({{ $user->email }})
+                </option>
+            @endif
         @endforeach
     </select>
     @error('assigned_to')

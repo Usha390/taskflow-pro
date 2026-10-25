@@ -70,8 +70,7 @@ class TaskController extends Controller
     }
 
     // Form submit হলে save করো
-      
-    public function store(Request $request)
+       public function store(Request $request)
     {
         // Role Check: Developer ra task create korte parbe na
         if (!in_array(auth()->user()->role, ['admin', 'manager'])) {
@@ -88,12 +87,19 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
         ]);
 
+        // Notun Check: Jodi assign kora user ta Developer na hoy
+        if ($request->assigned_to) {
+            $assignedUser = \App\Models\User::find($request->assigned_to);
+            if ($assignedUser && $assignedUser->role !== 'developer') {
+                return back()->withErrors(['assigned_to' => 'Tasks can only be assigned to Developers.'])->withInput();
+            }
+        }
+
         $task = Task::create($validated);
 
         return redirect()->route('projects.show', $task->project_id)
             ->with('success', 'Task created successfully!');
     }
-
     // একটা task দেখাও
     public function show(Task $task)
     {
