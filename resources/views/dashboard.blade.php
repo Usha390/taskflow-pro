@@ -121,9 +121,9 @@
                 <a href="{{ route('tasks.index') }}" 
                    class="inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors group">
                     View all
-                    <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
+                    <svg class="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+</svg>
                 </a>
             </div>
 
@@ -131,7 +131,7 @@
                 <div class="divide-y divide-gray-50">
                     @foreach($recentTasks as $task)
                         <a href="{{ route('tasks.show', $task) }}" 
-                           class="block px-6 py-4 hover:bg-gray-50/70 transition-colors group">
+                          class="block px-6 py-4 hover:bg-gray-50/70 dark:hover:bg-gray-700/50 transition-colors group"
                             <div class="flex items-center gap-4">
 
                                 {{-- Status Indicator --}}

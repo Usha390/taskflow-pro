@@ -2,21 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force Dark Mode for Body and Cards */
+/* =========================================
+   FORCE DARK MODE (Inputs, Cards, Modals, etc.)
+   ========================================= */
+
 html.dark body {
     background-color: #111827 !important;
     color: #f3f4f6 !important;
 }
 
 html.dark .bg-white,
-html.dark .bg-gray-50 {
+html.dark .bg-gray-50,
+html.dark .bg-gray-100 {
     background-color: #1f2937 !important;
 }
 
-html.dark .bg-gray-100 {
-    background-color: #111827 !important;
+/* Inputs, Selects, Textareas */
+html.dark input,
+html.dark select,
+html.dark textarea {
+    background-color: #374151 !important;
+    color: #f3f4f6 !important;
+    border-color: #4b5563 !important;
 }
 
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: #9ca3af !important;
+}
+
+/* Select Dropdown options */
+html.dark select option {
+    background-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+}
+
+/* Text Colors */
 html.dark .text-gray-900,
 html.dark .text-gray-800,
 html.dark .text-gray-700 {
@@ -28,7 +49,20 @@ html.dark .text-gray-500 {
     color: #9ca3af !important;
 }
 
+/* Borders */
 html.dark .border-gray-100,
-html.dark .border-gray-200 {
+html.dark .border-gray-200,
+html.dark .border-gray-300 {
     border-color: #374151 !important;
+}
+
+/* Hover states (Activity log er jonno) */
+html.dark .hover\:bg-gray-50:hover,
+html.dark .hover\:bg-gray-100:hover {
+    background-color: #374151 !important;
+}
+
+/* Dropdown Menu (Notification/Settings) */
+html.dark .ring-black {
+    --tw-ring-color: #4b5563 !important;
 }

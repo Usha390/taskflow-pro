@@ -29,6 +29,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // ==========================================
+    // Role Helpers (Purono gulo)
+    // ==========================================
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
@@ -43,28 +47,65 @@ class User extends Authenticatable
     {
         return $this->role === 'developer';
     }
+
+    // ==========================================
+    // NEW: Corporate Role Helpers (Director, Dept Head, Employee)
+    // ==========================================
+    public function isDirector(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isDepartmentHead(): bool
+    {
+        return $this->role === 'manager';
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->role === 'developer';
+    }
+
+    /**
+     * Display Name for Role (Frontend e dekhanor jonno)
+     */
+    public function getRoleNameAttribute(): string
+    {
+        return match($this->role) {
+            'admin' => 'Director',
+            'manager' => 'Department Head',
+            'developer' => 'Employee',
+            default => ucfirst($this->role),
+        };
+    }
+
+    // ==========================================
+    // Relationships
+    // ==========================================
+    
     // User এর সব projects (Many-to-Many)
-public function projects()
-{
-    return $this->belongsToMany(Project::class)
-                ->withPivot('role')
-                ->withTimestamps();
-}
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class)
+                    ->withPivot('role')
+                    ->withTimestamps();
+    }
 
-// User যে projects তৈরি করেছে
-public function ownedProjects()
-{
-    return $this->hasMany(Project::class, 'created_by');
-}
+    // User যে projects তৈরি করেছে
+    public function ownedProjects()
+    {
+        return $this->hasMany(Project::class, 'created_by');
+    }
 
-// User এর assigned tasks
-public function assignedTasks()
-{
-    return $this->hasMany(Task::class, 'assigned_to');
-}
-// User এর comments (অনেক comment)
-public function comments()
-{
-    return $this->hasMany(Comment::class);
-}
+    // User এর assigned tasks
+    public function assignedTasks()
+    {
+        return $this->hasMany(Task::class, 'assigned_to');
+    }
+
+    // User এর comments (অনেক comment)
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

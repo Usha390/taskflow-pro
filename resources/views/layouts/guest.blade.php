@@ -31,13 +31,10 @@
                         </div>
                     </div>
                     
-                    {{-- Brand Text --}}
+               {{-- Brand Text --}}
                     <div class="flex flex-col leading-none">
                         <span class="font-extrabold text-2xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                            TaskFlow
-                        </span>
-                        <span class="text-xs font-semibold text-gray-500 tracking-wider">
-                            PRO
+                            TaskBoard
                         </span>
                     </div>
                 </a>

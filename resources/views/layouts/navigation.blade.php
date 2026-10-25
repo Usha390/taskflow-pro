@@ -20,10 +20,7 @@
                         {{-- Brand Text --}}
                         <div class="flex flex-col leading-none">
                             <span class="font-extrabold text-lg bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                                TaskFlow
-                            </span>
-                            <span class="text-[10px] font-semibold text-gray-500 dark:text-gray-400 tracking-wider">
-                                PRO
+                                TaskBoard
                             </span>
                         </div>
                     </a>
@@ -125,7 +122,11 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                            {{-- Ekhane Name ar Role dekhabe --}}
+                            <div class="flex flex-col text-left">
+                                <span class="text-sm font-medium leading-tight">{{ Auth::user()->name }}</span>
+                                <span class="text-[10px] font-semibold text-indigo-600 dark:text-indigo-400">{{ Auth::user()->role_name }}</span>
+                            </div>
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -177,6 +178,7 @@
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-700">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</div>
+                <div class="font-medium text-xs text-indigo-600 dark:text-indigo-400">{{ Auth::user()->role_name }}</div>
                 <div class="font-medium text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</div>
             </div>
 
