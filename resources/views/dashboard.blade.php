@@ -12,7 +12,8 @@
                 <h1 class="text-xl font-bold text-gray-900 tracking-tight">Overview</h1>
                 <p class="text-xs text-gray-500 mt-0.5">{{ now()->format('l, F j, Y') }}</p>
             </div>
-            <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2">
+                @if(in_array(auth()->user()->role, ['admin', 'manager'])) 
                 <a href="{{ route('tasks.create') }}" 
                    class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors shadow-sm">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,6 +21,7 @@
                     </svg>
                     New Task
                 </a>
+                @endif
             </div>
         </div>
 
@@ -131,7 +133,7 @@
                 <div class="divide-y divide-gray-50">
                     @foreach($recentTasks as $task)
                         <a href="{{ route('tasks.show', $task) }}" 
-                          class="block px-6 py-4 hover:bg-gray-50/70 dark:hover:bg-gray-700/50 transition-colors group"
+                          class="block px-6 py-4 hover:bg-gray-50/70 dark:hover:bg-gray-700/50 transition-colors group">
                             <div class="flex items-center gap-4">
 
                                 {{-- Status Indicator --}}

@@ -55,9 +55,14 @@ class TaskController extends Controller
     return view('tasks.index', compact('tasks', 'projects', 'users'));
 }
 
-    // নতুন task form
+        // নতুন task form
     public function create(Request $request)
     {
+        // Role Check: Developer ra task create korte parbe na
+        if (!in_array(auth()->user()->role, ['admin', 'manager'])) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $projects = auth()->user()->projects;
         $selectedProject = $request->project_id;
 
@@ -65,8 +70,14 @@ class TaskController extends Controller
     }
 
     // Form submit হলে save করো
+      
     public function store(Request $request)
     {
+        // Role Check: Developer ra task create korte parbe na
+        if (!in_array(auth()->user()->role, ['admin', 'manager'])) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validated = $request->validate([
             'project_id' => 'required|exists:projects,id',
             'title' => 'required|string|max:255',
@@ -75,8 +86,6 @@ class TaskController extends Controller
             'status' => 'required|in:todo,in_progress,review,done',
             'priority' => 'required|in:low,medium,high,urgent',
             'due_date' => 'nullable|date',
-            
-
         ]);
 
         $task = Task::create($validated);
@@ -120,13 +129,16 @@ class TaskController extends Controller
         return redirect()->route('projects.show', $task->project_id)
             ->with('success', 'Task updated successfully!');
     }
-
     // Delete করো
     public function destroy(Task $task)
     {
+        // Role Check: Developer ra task delete korte parbe na
+        if (!in_array(auth()->user()->role, ['admin', 'manager'])) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $projectId = $task->project_id;
         $task->delete();
-   
 
         return redirect()->route('projects.show', $projectId)
             ->with('success', 'Task deleted successfully!');
