@@ -25,6 +25,49 @@
             </div>
         </div>
 
+                {{-- Burnout Detector Alert for Managers/Directors --}}
+        @if(auth()->user()->isDirector() || auth()->user()->isDepartmentHead())
+            @php
+                $overloadedUsers = \App\Models\User::where('role', 'developer')->get()->filter(fn($u) => $u->isAtBurnoutRisk());
+            @endphp
+
+            @if($overloadedUsers->count() > 0)
+                <div class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 p-4 mb-6 rounded-r-lg transition-colors duration-300">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0">
+                            <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-red-800 dark:text-red-300">Burnout Risk Alert!</h3>
+                            <p class="text-sm text-red-700 dark:text-red-400 mt-1">
+                                The following team members are overloaded with tasks:
+                                @foreach($overloadedUsers as $user)
+                                    <span class="inline-block bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300 px-2 py-0.5 rounded text-xs font-semibold ml-1">{{ $user->name }}</span>
+                                @endforeach
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endif
+
+        {{-- Burnout Warning for Employee --}}
+        @if(auth()->user()->isEmployee() && auth()->user()->isAtBurnoutRisk())
+            <div class="bg-orange-50 dark:bg-orange-900/30 border-l-4 border-orange-500 p-4 mb-6 rounded-r-lg transition-colors duration-300">
+                <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <div>
+                        <h3 class="text-sm font-bold text-orange-800 dark:text-orange-300">Take a Break!</h3>
+                        <p class="text-sm text-orange-700 dark:text-orange-400 mt-1">You have many pending tasks and tight deadlines. Please inform your Department Head to redistribute the workload.</p>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         {{-- Statistics Grid --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
 

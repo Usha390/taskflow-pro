@@ -108,4 +108,26 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+        /**
+     * Check if user is overloaded (Burnout Risk)
+     */
+    public function isAtBurnoutRisk(): bool
+    {
+        // Pending tasks (To Do, In Progress, Review)
+        $pendingTasks = $this->assignedTasks()
+            ->whereIn('status', ['todo', 'in_progress', 'review'])
+            ->get();
+
+        // 5 er beshi pending task
+        if ($pendingTasks->count() < 5) {
+            return false;
+        }
+
+        // Jodi 3 din er vitore 3 ta task er deadline thake
+        $urgentTasks = $pendingTasks->filter(function ($task) {
+            return $task->due_date && $task->due_date->diffInDays(now()) <= 3 && $task->due_date->isFuture();
+        });
+
+        return $urgentTasks->count() >= 3;
+    }
 }

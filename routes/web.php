@@ -67,3 +67,36 @@ Route::get('/activity', [ActivityController::class, 'index'])
     
 });
 require __DIR__.'/auth.php';
+Route::get('/test-burnout', function () {
+    // 1. Ekta project create koro
+    $project = \App\Models\Project::firstOrCreate(
+        ['name' => 'Burnout Test Project'],
+        [
+            'description' => 'Testing burnout detector.',
+            'created_by' => 1,
+            'color' => '#EF4444',
+        ]
+    );
+
+    // 2. Test User ke khuje ber koro
+    $testUser = \App\Models\User::where('email', 'test@taskflow.com')->first();
+
+    if (!$testUser) {
+        return "Test User not found!";
+    }
+
+    // 3. 5 ta task create koro (due date 2 din er vitore)
+    for ($i = 1; $i <= 5; $i++) {
+        \App\Models\Task::create([
+            'project_id' => $project->id,
+            'title' => "Urgent Task $i",
+            'description' => 'This is a burnout test task.',
+            'status' => 'todo',
+            'priority' => 'high',
+            'assigned_to' => $testUser->id,
+            'due_date' => now()->addDays(2), // 2 din er vitore
+        ]);
+    }
+
+    return "5 ta urgent task create hoyeche Test User er jonno! Ebar dashboard e dekho.";
+});
